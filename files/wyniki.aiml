@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aiml version="2.0">
+    <category>
+		<pattern>RESULTS</pattern>
+	<template>
+		 Marka: <get name="brand"/><br/>
+		 Model: <get name="model"/><br/>
+		 Paliwo: <get name="fuel"/>
+	<think>
+	<set name="url">https://www.otomoto.pl/osobowe/</set>
+		<set name="url">
+			<get name="url"/>
+				<condition name="brand">
+					<li><lowercase><get name="marka"/></lowercase></li>
+				</condition>
+				<condition name="model">
+					<li><lowercase><get name="model"/></lowercase></li>
+				</condition>
+				<condition name="fuel">
+					<li>?search%5Bfilter_enum_fuel_type%5D%5B0%5D=<get name="fuel"/></li>
+				</condition>
+			</set>
+		</think>
+	<button>
+		<text>Show results</text>
+		<url><get name="url"/></url>
+	</button>
+	</template>
+ </category>
+ </aiml>
