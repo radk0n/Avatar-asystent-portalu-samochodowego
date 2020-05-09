@@ -12,6 +12,27 @@
         </template>
     </category>
     
+    <category>
+        <pattern>czesc</pattern>
+        <template>
+        <image>https://raw.githubusercontent.com/radk0n/Avatar-asystent-portalu-samochodowego/master/car_happy_2.png</image>
+        Hej, jestem wirtualnym asystentem, 
+        kóry pomoże Ci wybrać auto Twoich marzeń. 
+        W czym mogę Ci pomóc?
+        <button>
+            <text>Chciałbym kupić auto</text>
+            <postback>Brand</postback>
+        </button>
+        <button>
+            <text>Dane kontaktowe</text>
+            <postback>Contact</postback>
+        </button>
+        <button>
+            <text>O nas</text>
+            <postback>About</postback>
+        </button>
+        </template>
+    </category>
     
 <!--  *********************     POWITANIA    *********************   -->
 
@@ -46,20 +67,6 @@
     
 <!--  *********************     WYBÓR AUTA    *********************   -->
     
-    <category>
-        <pattern>czesc</pattern>
-        <template>
-        <image>https://raw.githubusercontent.com/radk0n/Avatar-asystent-portalu-samochodowego/master/car_happy_2.png</image>
-        Hej, jestem wirtualnym asystentem, 
-        kóry pomoże Ci wybrać auto Twoich marzeń. 
-        W czym mogę Ci pomóc?
-        <button>
-            <text>Chciałbym kupić auto</text>
-            <postback>Brand</postback>
-        </button>
-        </template>
-    </category>
-   
     <category>
         <pattern>Brand</pattern>
         <template>
@@ -344,6 +351,43 @@
                 <li value="nie">Super! Zawsze do usług!</li>
                 <li>Rozumiem, na pewno wezmę to pod uwagę!</li>
             </condition>
+        </template>
+    </category>
+    
+    
+<!--  *********************     KONTAKT    *********************   -->
+
+    <category>
+        <pattern>Contact</pattern>
+        <template>
+            Adres: ul. Sezamkowa <br/>
+            Telefon: +48 123 456 789 <br/>
+            Email: kermit@zaba.com
+            <button>
+              <text>Powrót</text>
+              <postback>czesc</postback>
+            </button>
+        </template>
+    </category>
+
+<!--  *********************     O NAS    *********************   -->
+
+    <category>
+        <pattern>About</pattern>
+        <template>
+            <card>
+                <title>Sprawdź naszego facebooka</title>
+                <subtitle>OTOMOTO</subtitle>
+                <image>https://www.stgu.pl/stgu_files/Image/CASE/otomoto/OTOMOTO_logo_animacja.gif</image>
+                <button>
+                  <text>Odwiedź</text>
+                  <url>https://www.facebook.com/otomotopl</url>
+                </button>
+                <button>
+                  <text>Powrót</text>
+                  <postback>czesc</postback>
+                </button>
+            </card>
         </template>
     </category>
 </aiml>
