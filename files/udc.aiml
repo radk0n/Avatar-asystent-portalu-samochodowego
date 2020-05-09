@@ -2,12 +2,13 @@
 <aiml version="2.0">
     <category>
         <pattern>*</pattern>
-        <template>Przepraszam, nie rozumiem zapytania "<set name="na"><star/></set>". Czy chciałeś może kupić auto swoich marzeń?
+        <template>
+        <image>https://raw.githubusercontent.com/radk0n/Avatar-asystent-portalu-samochodowego/master/car_wonder.png</image>
+        Przepraszam, nie rozumiem zapytania "<set name="na"><star/></set>". Czy chciałeś może kupić auto swoich marzeń?
         <button>
                 <text>Chciałbym kupić auto</text>
                 <postback>Brand</postback>
             </button>
-        <image>https://github.com/radk0n/Avatar-asystent-portalu-samochodowego/blob/master/car_wonder.png</image>
         </template>
     </category>
     
@@ -47,16 +48,14 @@
     
     <category>
         <pattern>czesc</pattern>
-        <template>Hej, jestem wirtualnym asystentem, 
+        <template>
+        <image>https://raw.githubusercontent.com/radk0n/Avatar-asystent-portalu-samochodowego/master/car_happy_2.png</image>
+        Hej, jestem wirtualnym asystentem, 
         kóry pomoże Ci wybrać auto Twoich marzeń. 
         W czym mogę Ci pomóc?
         <button>
-                <text>Chciałbym kupić auto</text>
-                <postback>Brand</postback>
-        </button>
-        <button>
-            <text>Oceń asystenta</text>
-            <postback>Feedback</postback>
+            <text>Chciałbym kupić auto</text>
+            <postback>Brand</postback>
         </button>
         </template>
     </category>
@@ -64,7 +63,7 @@
     <category>
         <pattern>Brand</pattern>
         <template>
-            Dobrze, zacznijmy od Twoich preferencji dotyczących auta.
+            Dobrze, zacznijmy od ogólnych pytań dotyczących auta.
             Jakiej marki auta szukasz?
         </template>
     </category>
@@ -101,8 +100,70 @@
         <pattern>*</pattern>
         <that>JAKIE PALIWO CHCIAŁBYŚ TANKOWAĆ</that>
         <template>
+            <think><set name="fuel"><star/></set></think>
+            Podsumujmy wybrane kryteria...<br/><br/>
+            Marka: <get name="brand"/><br/>
+    		Model: <condition name="model">
+    		    <li value="NIE">Wszystkie<br/></li>
+    		    <li><get name="model"/><br/></li>
+    		</condition>
+    		Typ: <get name="type"/><br/>
+    		Paliwo: <get name="fuel"/><br/><br/>
+            
+            Czy wybrane kryteria się zgadzają? 
+            Jeżeli tak, przejdziemy do bardziej szczegółowych pytań.
+            Jeżeli nie, zaczniemy dobór kryteriów od nowa.
+            <button>
+                <text>Zgadzają się</text>
+    		    <postback>DetailedQuestions</postback>
+            </button>
+            <button>
+                <text>Od nowa</text>
+                <postback>Brand</postback>
+            </button>
+        </template>
+    </category>
+    
+    <category>
+        <pattern>DetailedQuestions</pattern>
+        <template>
+            No dobrze, następne pytanie brzmi: jaka jest dolna granica jeśli chodzi o rocznik auta?
+        </template>
+    </category>
+    
+    <category>
+        <pattern>*</pattern>
+        <that>NO DOBRZE, NASTĘPNE PYTANIE BRZMI JAKA JEST DOLNA GRANICA JEŚLI CHODZI O ROCZNIK AUTA</that>
+        <template>
+            <think><set name="productionYearFrom"><star/></set></think>
+            Okej, a górna granica?
+        </template>
+    </category>
+    
+    <category>
+        <pattern>*</pattern>
+        <that>OKEJ, A GÓRNA GRANICA</that>
+        <template>
+            <think><set name="productionYearTo"><star/></set></think>
+            Rozumiem, teraz zapytam Cię o przedział cenowy. Podaj mi proszę dolną granicę Twoich możliwości finansowych.
+        </template>
+    </category>
+    
+    <category>
+        <pattern>*</pattern>
+        <that>PODAJ MI PROSZĘ DOLNĄ GRANICĘ TWOICH MOŻLIWOŚCI FINANSOWYCH</that>
+        <template>
+            <think><set name="priceFrom"><star/></set></think>
+            Zanotowałem, teraz poproszę o podanie górnej granicy.
+        </template>
+    </category>
+    
+    <category>
+        <pattern>*</pattern>
+        <that>ZANOTOWAŁEM, TERAZ POPROSZĘ O PODANIE GÓRNEJ GRANICY</that>
+        <template>
             <think>
-                <set name="fuel"><star/></set>
+                <set name="priceTo"><star/></set>
                 <set name="url">https://www.otomoto.pl/osobowe/</set>
         		<set name="url">
         			<get name="url"/>
@@ -116,46 +177,69 @@
         				<condition name="type">
         					<li value="małe">/seg-mini</li>
         					<li value="miejskie">/seg-citi-car</li>
+        					<li value="kombi">/seg-combi</li>
         					<li>/seg-<get name="type"/></li>
         				</condition>
-        				<condition name="fuel">
-        				    <li value="benzyna">?search%5Bfilter_enum_fuel_type%5D%5B0%5D=petrol</li>
-        				    <li value="gaz">?search%5Bfilter_enum_fuel_type%5D%5B0%5D=petrol-lpg</li>
-        				    <li value="lpg">?search%5Bfilter_enum_fuel_type%5D%5B0%5D=petrol-lpg</li>
-        				    <li value="ropa">?search%5Bfilter_enum_fuel_type%5D%5B0%5D=diesel</li>
-        					<li value="diesel">?search%5Bfilter_enum_fuel_type%5D%5B0%5D=diesel</li>
+        				<condition name="productionYearFrom">
+        					<li>/od-<get name="productionYearFrom"/></li>
         				</condition>
-    			</set>
+        				<condition name="priceFrom">
+        				    <li>/?search%5Bfilter_float_price%3Afrom%5D=<get name="priceFrom"/>&amp;</li>
+        				</condition>
+        				<condition name="priceTo">
+        				    <li>search%5Bfilter_float_price%3Ato%5D=<get name="priceTo"/>&amp;</li>
+        				</condition>
+        				<condition name="productionYearTo">
+        				    <li>search%5Bfilter_float_year%3Ato%5D=<get name="productionYearTo"/>&amp;</li>
+        				</condition>
+        				<condition name="fuel">
+        				    <li value="benzyna">search%5Bfilter_enum_fuel_type%5D%5B0%5D=petrol</li>
+        				    <li value="gaz">search%5Bfilter_enum_fuel_type%5D%5B0%5D=petrol-lpg</li>
+        				    <li value="lpg">search%5Bfilter_enum_fuel_type%5D%5B0%5D=petrol-lpg</li>
+        				    <li value="ropa">search%5Bfilter_enum_fuel_type%5D%5B0%5D=diesel</li>
+        					<li value="diesel">search%5Bfilter_enum_fuel_type%5D%5B0%5D=diesel</li>
+        				</condition>
+    			</set>    
             </think>
-            Podsumujmy wybrane kryteria...<br/><br/>
+            Dobrze, podsumujmy teraz wszystkie kryteria...<br/><br/>
             Marka: <get name="brand"/><br/>
-    		Model: <condition>
+    		Model: 
+    		<condition name="model">
     		    <li value="NIE">Wszystkie<br/></li>
     		    <li><get name="model"/><br/></li>
     		</condition>
     		Typ: <get name="type"/><br/>
-    		Paliwo: <get name="fuel"/><br/><br/>
+    		Paliwo: <get name="fuel"/><br/>
+            Rocznik od: <get name="productionYearFrom"/><br/>
+            Rocznik do: <get name="productionYearTo"/><br/>
+            Cena od: <get name="priceFrom"/><br/>
+            Cena do: <get name="priceTo"/><br/><br/>
             
             Czy wybrane kryteria się zgadzają? 
-            Jeżeli tak, zaczniemy wyszukiwać auta Twoich marzeń.
-            Jeżeli nie, zaczniemy dobór kryteriów od nowa.
+            Jeżeli tak, przejdziemy do opcji wyszukania auta.
+            Jeżeli nie, możesz poprawić podane kryteria.
             <button>
                 <text>Zgadzają się</text>
     		    <postback>Thanks</postback>
             </button>
             <button>
-                <text>Od nowa</text>
+                <text>Popraw dane ogólne</text>
                 <postback>Brand</postback>
+            </button>
+            <button>
+                <text>Popraw dane szczegółowe</text>
+                <postback>DetailedQuestions</postback>
             </button>
         </template>
     </category>
-    
     
 <!--  *********************     PODZIĘKOWANIE    *********************   -->
 
      <category>
         <pattern>Thanks</pattern>
-        <template>Dziękujemy za skorzystanie z naszych usług. Jeśli nie znajdziesz auta swoich marzeń,
+        <template>
+        <image>https://raw.githubusercontent.com/radk0n/Avatar-asystent-portalu-samochodowego/master/car_happy.png</image>
+        Dziękujemy za skorzystanie z naszych usług. Jeśli nie znajdziesz auta swoich marzeń,
         zapraszamy do ponownych konsultacji.
         <button>
             <text>Szukaj!</text>
@@ -165,7 +249,10 @@
             <text>Spróbujmy jeszcze raz</text>
             <postback>Brand</postback>
         </button>
-        <image>https://raw.githubusercontent.com/radk0n/Avatar-asystent-portalu-samochodowego/master/car_happy.png</image>
+        <button>
+            <text>Oceń asystenta</text>
+            <postback>Feedback</postback>
+        </button>
         </template>
     </category>
     
@@ -200,43 +287,63 @@
     <category>
         <pattern>FeedbackVeryLow</pattern>
         <template>
+            <image>https://raw.githubusercontent.com/radk0n/Avatar-asystent-portalu-samochodowego/master/car_sad.png</image>
             Czy naprawdę było tak źle? 
             Napisz proszę co Ci się nie podobało, a ja sprobuje się poprawić na przyszłość.
-            <image>https://raw.githubusercontent.com/radk0n/Avatar-asystent-portalu-samochodowego/master/car_sad.png</image>
         </template>
     </category>
     
     <category>
         <pattern>FeedbackLow</pattern>
         <template>
+            <image>https://raw.githubusercontent.com/radk0n/Avatar-asystent-portalu-samochodowego/master/car_sad.png</image>
             Widzę, że nie do końca jesteś zadowolony z mojej pomocy. 
             Napisz proszę co Ci się nie podobało, a ja sprobuje się poprawić na przyszłość.
-            <image>https://raw.githubusercontent.com/radk0n/Avatar-asystent-portalu-samochodowego/master/car_sad.png</image>
         </template>
     </category>
     
     <category>
         <pattern>FeedbackAverage</pattern>
         <template>
+            <image>https://raw.githubusercontent.com/radk0n/Avatar-asystent-portalu-samochodowego/master/car_wonder.png</image>
             Z Twojej oceny wynika, że mogło pójść lepiej. 
             Napisz proszę co Ci się nie podobało, a ja sprobuje się poprawić na przyszłość.
-            <image>https://raw.githubusercontent.com/radk0n/Avatar-asystent-portalu-samochodowego/master/car_wonder.png</image>
         </template>
     </category>
     
     <category>
         <pattern>FeedbackGood</pattern>
         <template>
-            Dziękuję! Czy jest coś co mógłbym w sobie poprawić?
             <image>https://raw.githubusercontent.com/radk0n/Avatar-asystent-portalu-samochodowego/master/car_happy_2.png</image>
+            Dziękuję! Czy jest coś, co Twoim zdaniem co mógłbym w sobie poprawić?
         </template>
     </category>
     
     <category>
         <pattern>FeedbackVeryGood</pattern>
         <template>
-            Bardzo dziękuję! Czy mogę coś dla Ciebie zrobić?
             <image>https://raw.githubusercontent.com/radk0n/Avatar-asystent-portalu-samochodowego/master/car_happy.png</image>
+            Bardzo dziękuję! Czy jest coś, co Twoim zdaniem co mógłbym w sobie poprawić?
+        </template>
+    </category>
+    
+    <category>
+        <pattern>*</pattern>
+        <that>NAPISZ PROSZĘ CO CI SIĘ NIE PODOBAŁO, A JA SPROBUJE SIĘ POPRAWIĆ NA PRZYSZŁOŚĆ</that>
+        <template>
+            Rozumiem, na pewno wezmę to pod uwagę!
+        </template>
+    </category>
+    
+    <category>
+        <pattern>*</pattern>
+        <that>CZY JEST COŚ, CO TWOIM ZDANIEM CO MÓGŁBYM W SOBIE POPRAWIĆ</that>
+        <template>
+            <think><set name="whatToChange"><star/></set></think>
+            <condition name="whatToChange">
+                <li value="nie">Super! Zawsze do usług!</li>
+                <li>Rozumiem, na pewno wezmę to pod uwagę!</li>
+            </condition>
         </template>
     </category>
 </aiml>
