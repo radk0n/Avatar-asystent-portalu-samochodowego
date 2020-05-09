@@ -1,14 +1,63 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <aiml version="2.0">
     <category>
-        <pattern>Cześć</pattern>
+        <pattern>*</pattern>
+        <template>Przepraszam, nie rozumiem zapytania "<set name="na"><star/></set>". Czy chciałeś może kupić auto swoich marzeń?
+        <button>
+                <text>Chciałbym kupić auto</text>
+                <postback>Brand</postback>
+            </button>
+        <image>https://github.com/radk0n/Avatar-asystent-portalu-samochodowego/blob/master/car_wonder.png</image>
+        </template>
+    </category>
+    
+    
+<!--  *********************     POWITANIA    *********************   -->
+
+    <category>
+        <pattern>cześć</pattern>
+        <template>
+            <srai>czesc</srai>
+        </template>
+    </category>
+    
+    <category>
+        <pattern>hej</pattern>
+        <template>
+            <srai>czesc</srai>
+        </template>
+    </category>
+    
+    <category>
+        <pattern>hi</pattern>
+        <template>
+            <srai>czesc</srai>
+        </template>
+    </category>
+    
+    <category>
+        <pattern>witam</pattern>
+        <template>
+            <srai>czesc</srai>
+        </template>
+    </category>
+    
+    
+<!--  *********************     WYBÓR AUTA    *********************   -->
+    
+    <category>
+        <pattern>czesc</pattern>
         <template>Hej, jestem wirtualnym asystentem, 
         kóry pomoże Ci wybrać auto Twoich marzeń. 
         W czym mogę Ci pomóc?
         <button>
                 <text>Chciałbym kupić auto</text>
                 <postback>Brand</postback>
-            </button>
+        </button>
+        <button>
+            <text>Oceń asystenta</text>
+            <postback>Feedback</postback>
+        </button>
         </template>
     </category>
    
@@ -91,13 +140,103 @@
             Jeżeli tak, zaczniemy wyszukiwać auta Twoich marzeń.
             Jeżeli nie, zaczniemy dobór kryteriów od nowa.
             <button>
-                <text>Szukaj!</text>
-    		    <url><get name="url"/></url>
+                <text>Zgadzają się</text>
+    		    <postback>Thanks</postback>
             </button>
             <button>
                 <text>Od nowa</text>
                 <postback>Brand</postback>
             </button>
+        </template>
+    </category>
+    
+    
+<!--  *********************     PODZIĘKOWANIE    *********************   -->
+
+     <category>
+        <pattern>Thanks</pattern>
+        <template>Dziękujemy za skorzystanie z naszych usług. Jeśli nie znajdziesz auta swoich marzeń,
+        zapraszamy do ponownych konsultacji.
+        <button>
+            <text>Szukaj!</text>
+		    <url><get name="url"/></url>
+        </button>
+        <button>
+            <text>Spróbujmy jeszcze raz</text>
+            <postback>Brand</postback>
+        </button>
+        <image>https://raw.githubusercontent.com/radk0n/Avatar-asystent-portalu-samochodowego/master/car_happy.png</image>
+        </template>
+    </category>
+    
+<!--  *********************     OCENA    *********************   -->
+    
+    <category>
+        <pattern>Feedback</pattern>
+        <template>Aby ocenić asystenta wybierz przycisk z odpowiadającą Tobie liczbą gwiazdek
+        <button>
+            <text>&#11088;</text>
+            <postback>FeedbackVeryLow</postback>
+        </button>
+        <button>
+            <text>&#11088;&#11088;</text>
+            <postback>FeedbackLow</postback>
+        </button>
+        <button>
+            <text>&#11088;&#11088;&#11088;</text>
+            <postback>FeedbackAverage</postback>
+        </button>
+        <button>
+            <text>&#11088;&#11088;&#11088;&#11088;</text>
+            <postback>FeedbackGood</postback>
+        </button>
+        <button>
+            <text>&#11088;&#11088;&#11088;&#11088;&#11088;</text>
+            <postback>FeedbackVeryGood</postback>
+        </button>
+        </template>
+    </category>
+    
+    <category>
+        <pattern>FeedbackVeryLow</pattern>
+        <template>
+            Czy naprawdę było tak źle? 
+            Napisz proszę co Ci się nie podobało, a ja sprobuje się poprawić na przyszłość.
+            <image>https://raw.githubusercontent.com/radk0n/Avatar-asystent-portalu-samochodowego/master/car_sad.png</image>
+        </template>
+    </category>
+    
+    <category>
+        <pattern>FeedbackLow</pattern>
+        <template>
+            Widzę, że nie do końca jesteś zadowolony z mojej pomocy. 
+            Napisz proszę co Ci się nie podobało, a ja sprobuje się poprawić na przyszłość.
+            <image>https://raw.githubusercontent.com/radk0n/Avatar-asystent-portalu-samochodowego/master/car_sad.png</image>
+        </template>
+    </category>
+    
+    <category>
+        <pattern>FeedbackAverage</pattern>
+        <template>
+            Z Twojej oceny wynika, że mogło pójść lepiej. 
+            Napisz proszę co Ci się nie podobało, a ja sprobuje się poprawić na przyszłość.
+            <image>https://raw.githubusercontent.com/radk0n/Avatar-asystent-portalu-samochodowego/master/car_wonder.png</image>
+        </template>
+    </category>
+    
+    <category>
+        <pattern>FeedbackGood</pattern>
+        <template>
+            Dziękuję! Czy jest coś co mógłbym w sobie poprawić?
+            <image>https://raw.githubusercontent.com/radk0n/Avatar-asystent-portalu-samochodowego/master/car_happy_2.png</image>
+        </template>
+    </category>
+    
+    <category>
+        <pattern>FeedbackVeryGood</pattern>
+        <template>
+            Bardzo dziękuję! Czy mogę coś dla Ciebie zrobić?
+            <image>https://raw.githubusercontent.com/radk0n/Avatar-asystent-portalu-samochodowego/master/car_happy.png</image>
         </template>
     </category>
 </aiml>
